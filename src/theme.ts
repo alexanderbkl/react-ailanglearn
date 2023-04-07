@@ -20,6 +20,14 @@ const theme = {
         backgroundColor: '#e1e4e8',
         height: '100%',
     },
+    foregroundContainer: {
+        backgroundColor: 'white',
+        display: 'flex',
+        flexDirection: 'column',
+        padding: 10,
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
 };
 
 export default theme;
