@@ -11,9 +11,9 @@ const Main = () => {
         <View style={theme.backgroundContainer}>
             <AppBar />
             <Routes>
-                <Route path="/" element={<RepositoryList />} />
+                <Route path="/signin" element={<RepositoryList />} />
                 <Route path="*" element={<Navigate to="/" replace />} />
-                <Route path="/signin" element={<SignIn />} />
+                <Route path="/" element={<SignIn />} />
             </Routes>
         </View>
     );

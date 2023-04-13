@@ -1,39 +1,15 @@
-import FormikTextInput from './FormikTextInput';
-import { View, Pressable, Button, StyleSheet } from 'react-native';
-import { Formik, useField } from 'formik';
-import theme from '../theme';
+import { Formik } from 'formik';
 import * as yup from 'yup';
-
-const foregroundStyle = theme.foregroundContainer;
-
-const styles = StyleSheet.create({
-    foregroundContainer: {
-        backgroundColor: foregroundStyle.backgroundColor,
-        padding: foregroundStyle.padding,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-    },
-})
-
-const SignInForm = ({ onSubmit }: any) => {
+import { signInUser } from '../requests/client';
+import React, { useContext } from 'react';
+import SignInForm from './SignInForm';
+import AuthStorageContext from '../contexts/AuthStorageContext';
+import { Button } from 'react-native';
 
 
-    const [userField, userMeta, userHelpers] = useField('username');
-    const [passwordField, passwordMeta, passwordHelpers] = useField('password');
 
 
-    return (
-        <View style={styles.foregroundContainer}>
-            <FormikTextInput name="username" placeholder="Username" />
-            <FormikTextInput name="password" placeholder="Password" secureTextEntry />
-            <Pressable onPress={onSubmit}>
-                <Button title="Sign in" />
-            </Pressable>
-        </View>
-    )
-}
+
 
 const validationSchema = yup.object().shape({
     username: yup
@@ -49,16 +25,42 @@ const validationSchema = yup.object().shape({
 })
 
 const SignIn = () => {
-    const onSubmit = (values: any) => {
-        console.log(values);
+
+    const authStorage = useContext(AuthStorageContext);
+
+    const onSubmit = async (values: any) => {
+
+        var signInRequest = await signInUser(values.username, values.password);
+
+        if (signInRequest.status === 200) {
+            console.log('Sign in successful: ' + signInRequest.message);
+            console.log(JSON.stringify(signInRequest.data.result))
+
+            console.log(JSON.stringify(authStorage))
+
+            await authStorage.setCredentials(signInRequest.data.result);
+
+            alert(JSON.stringify(await authStorage.getCredentials()));
+
+        } else {
+            console.log(signInRequest.message + ': ' + signInRequest.data.result);
+            console.log(JSON.stringify(signInRequest))
+            alert(signInRequest.message + ': ' + signInRequest.data.result);
+        }
+
     }
-    return <Formik
-        initialValues={{ username: '', password: '' }}
-        onSubmit={onSubmit}
-        validationSchema={validationSchema}
-    >
-        {({ handleSubmit }: any) => <SignInForm onSubmit={handleSubmit} />}
-    </Formik>;
+
+
+
+    return (
+        <Formik
+            initialValues={{ username: '', password: '' }}
+            onSubmit={onSubmit}
+            validationSchema={validationSchema}
+        >
+            {({ handleSubmit }: any) => <SignInForm onSubmit={handleSubmit} />}
+        </Formik>
+    )
 }
 
 export default SignIn;
