@@ -11,8 +11,11 @@ const styles = StyleSheet.create({
         padding: foregroundStyle.padding,
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'space-between',
+        alignItems: 'stretch',
+        justifyContent: 'center',
+        paddingStart: 20,
+        paddingEnd: 20,
+        height: '100%',
     },
 })
 
@@ -30,7 +33,7 @@ const SignInForm = ({ onSubmit }: any) => {
 
     return (
         <View style={styles.foregroundContainer}>
-            <FormikTextInput name="username" placeholder="Username" />
+            <FormikTextInput name="username" placeholder="Email" />
             <FormikTextInput name="password" placeholder="Password" secureTextEntry />
             <Pressable onPress={() => onSubmit()}>
 

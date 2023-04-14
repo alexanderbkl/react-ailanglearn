@@ -3,9 +3,9 @@ import * as yup from 'yup';
 import { signInUser } from '../requests/client';
 import React, { useContext } from 'react';
 import SignInForm from './SignInForm';
-import AuthStorageContext from '../contexts/AuthStorageContext';
 import { Button } from 'react-native';
-
+import AuthStorage from '../utils/authStorage';
+import { useNavigate } from 'react-router-native';
 
 
 
@@ -26,21 +26,28 @@ const validationSchema = yup.object().shape({
 
 const SignIn = () => {
 
-    const authStorage = useContext(AuthStorageContext);
+    const navigate = useNavigate();
+
 
     const onSubmit = async (values: any) => {
 
-        var signInRequest = await signInUser(values.username, values.password);
+
+        var signInRequest: any = await signInUser(values.username, values.password);
+
+
+        if (!signInRequest) {
+            console.log('Sign in failed')
+            return
+        }
 
         if (signInRequest.status === 200) {
             console.log('Sign in successful: ' + signInRequest.message);
             console.log(JSON.stringify(signInRequest.data.result))
 
-            console.log(JSON.stringify(authStorage))
 
-            await authStorage.setCredentials(signInRequest.data.result);
+            await AuthStorage.setCredentials(signInRequest.data.result);
 
-            alert(JSON.stringify(await authStorage.getCredentials()));
+            navigate('/repositories');
 
         } else {
             console.log(signInRequest.message + ': ' + signInRequest.data.result);

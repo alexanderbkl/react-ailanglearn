@@ -1,5 +1,6 @@
-import { FlatList, View, StyleSheet } from 'react-native';
+import { FlatList, View, StyleSheet, Button } from 'react-native';
 import RepositoryItem from './RepositoryItem';
+import AuthStorage from '../utils/authStorage';
 
 const styles = StyleSheet.create({
     separator: {
@@ -114,12 +115,19 @@ const repositories = [
 const ItemSeparator = () => <View style={styles.separator} />;
 
 const RepositoryList = () => {
+    async function getCredentials() {
+        console.log(await AuthStorage.getCredentials())
+    }
+
     return (
+        <View>
         <FlatList
             data={repositories}
             ItemSeparatorComponent={ItemSeparator}
             renderItem={({ item }) => <RepositoryItem styles={styles} item={item} />}
         />
+        <Button onPress={() => getCredentials()} title="Press me" />
+        </View>
     )
 }
 
