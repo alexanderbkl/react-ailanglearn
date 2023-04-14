@@ -7,43 +7,27 @@ import { useNavigate } from 'react-router-native';
 import theme from '../theme';
 import AppBar from './AppBar';
 import SignIn from './SignIn';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { CheckAuth } from '../utils/authUtils';
 
-const SignOut = () => {
-    return(
-    <TouchableOpacity
-            >
-                <View
-                    style={{
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        borderRadius: 5,
-                    }}
-                >
-                    <Button onPress={() => AuthStorage.removeCredentials()} title="Sign in" />
 
-                </View>
-            </TouchableOpacity>)
-}
 
 const Main = () => {
     const navigate = useNavigate();
 
-    var signedIn = false;
     useEffect(() => {
-        AuthStorage.getCredentials().then((value) => {
+        //check if user is signed in:
+        CheckAuth().then((value) => {
             if (value !== null) {
-                signedIn = true;
                 //navigate to repository list:
                 navigate('/repositories');
-
             } else {
-                signedIn = false;
                 //navigate to sign in
                 navigate('/signin');
             }
-        });
+        })
     }, [])
+
     return (
         <View style={theme.backgroundContainer}>
             <AppBar />

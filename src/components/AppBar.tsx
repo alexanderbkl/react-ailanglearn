@@ -3,6 +3,9 @@ import Constants from 'expo-constants';
 import theme from '../theme';
 import Text from './Text';
 import { Link } from 'react-router-native';
+import { CheckAuth, SignOut } from '../utils/authUtils';
+import { useEffect, useState } from 'react';
+import AuthStorage from '../utils/authStorage';
 
 const styles = StyleSheet.create({
     container: {
@@ -32,16 +35,27 @@ const styles = StyleSheet.create({
     },
 })
 
+
 const AppBar = () => {
+
+
+
+    //check if user is signed in:
+
+
+
+
+
+
+
     return (
         <View style={styles.flexContainer}>
             <ScrollView showsHorizontalScrollIndicator={false} horizontal>
                 <Link style={styles.tabContainer} to="/">
                     <Text color="textWhite" fontWeight="bold" >Repositories</Text>
                 </Link>
-                <Link style={styles.tabContainer} to="/signin">
-                    <Text color="textWhite" fontWeight="bold">Sign In</Text>
-                </Link>
+                <SignOut />
+
             </ScrollView>
         </View>
     )

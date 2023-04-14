@@ -8,7 +8,17 @@ class AuthStorage {
         AuthStorage.namespace = namespace;
     }
 
+
+    static async getSignedIn() {
+        const signedIn = await AsyncStorage.getItem(`${this.namespace}:signedIn`);
+        if (!signedIn) {
+            return null;
+        }
+        return signedIn;
+    }
+
     static async getCredentials() {
+
         // Get the access token for the storage
         const accessToken = await AsyncStorage.getItem(`${this.namespace}:token`);
         const expiresIn = await AsyncStorage.getItem(`${this.namespace}:expires_in`);
@@ -19,6 +29,7 @@ class AuthStorage {
 
         const credentials: Credentials = { token: accessToken, expires_in: parseInt(expiresIn) };
         
+
         return credentials;
     }
 
@@ -27,12 +38,16 @@ class AuthStorage {
         AsyncStorage.setItem(`${this.namespace}:token`, credentials.token);
         AsyncStorage.setItem(`${this.namespace}:expires_in`, credentials.expires_in.toString());
 
+        await AsyncStorage.setItem(`${this.namespace}:signedIn`, "true");
+
     }
 
     static async removeCredentials() {
         // Remove the access token from the storage
         AsyncStorage.removeItem(`${this.namespace}:token`);
         AsyncStorage.removeItem(`${this.namespace}:expires_in`);
+
+        await AsyncStorage.setItem(`${this.namespace}:signedIn`, "false");
     }
 }
 
