@@ -1,9 +1,9 @@
 import { useField } from "formik";
-import FormikTextInput from "./FormikTextInput";
+import FormikTextInput from "../Composable/FormikTextInput";
 import { Button, Pressable, StyleSheet, TouchableOpacity, View } from 'react-native';
-import theme from "../theme";
+import theme from "../../theme";
 import { Navigate, useNavigate } from "react-router-native";
-import Text from "./Text";
+import Text from "../Composable/Text";
 const foregroundStyle = theme.foregroundContainer;
 
 const styles = StyleSheet.create({

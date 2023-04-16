@@ -1,4 +1,4 @@
-import Main from './src/components/Main';
+import Main from './src/Main';
 import { NativeRouter } from 'react-router-native';
 import AuthStorage from './src/utils/authStorage';
 import { useFonts } from 'expo-font';

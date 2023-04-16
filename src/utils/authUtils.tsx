@@ -21,10 +21,10 @@ export const CheckAuth = async () => {
 }
 
 
-export const SignOut = ({ signedObj }: any) => {
+export const SignOut = ({ appBarState }: any) => {
 
     const navigate = useNavigate();
-    var signedIn = signedObj.signedIn;
+    var signedIn = appBarState.signedIn;
 
 
 
@@ -38,12 +38,11 @@ export const SignOut = ({ signedObj }: any) => {
                     style={{
                         alignItems: 'center',
                         justifyContent: 'center',
-                        borderRadius: 5,
                     }}
                 >
                     <Button onPress={() => {
                         AuthStorage.signOut().then(() => {
-                            signedObj.setSignedIn(false), signedIn = false
+                            appBarState.setSignedIn(false), signedIn = false
                             console.log("signout")
                             navigate('/signin')
                         });
@@ -57,7 +56,6 @@ export const SignOut = ({ signedObj }: any) => {
                     style={{
                         alignItems: 'center',
                         justifyContent: 'center',
-                        borderRadius: 5,
                     }}
                 >
                     <Button onPress={() => {
@@ -71,20 +69,5 @@ export const SignOut = ({ signedObj }: any) => {
     )
 }
 
-export const SignIn = () => {
-    return (
-        <TouchableOpacity>
-            <View
-                style={{
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    borderRadius: 5,
-                }}
-            >
-                <Button onPress={() => AuthStorage.signOut()} title="Sign out" />
 
-            </View>
-        </TouchableOpacity>
-    )
-}
 

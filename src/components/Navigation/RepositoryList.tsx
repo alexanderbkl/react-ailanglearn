@@ -1,6 +1,6 @@
 import { FlatList, View, StyleSheet, Button, AsyncStorage } from 'react-native';
-import RepositoryItem from './RepositoryItem';
-import AuthStorage from '../utils/authStorage';
+import RepositoryItem from '../Composable/RepositoryItem';
+import AuthStorage from '../../utils/authStorage';
 const styles = StyleSheet.create({
     separator: {
         height: 10,
@@ -115,18 +115,18 @@ const ItemSeparator = () => <View style={styles.separator} />;
 
 const RepositoryList = () => {
     async function getCredentials() {
-       // console.log(await AuthStorage.getCredentials())
+        // console.log(await AuthStorage.getCredentials())
         console.log(await AuthStorage.getProfile())
     }
 
     return (
         <View>
-        <FlatList
-            data={repositories}
-            ItemSeparatorComponent={ItemSeparator}
-            renderItem={({ item }) => <RepositoryItem styles={styles} item={item} />}
-        />
-        <Button onPress={() => getCredentials()} title="Press me" />
+            <FlatList
+                data={repositories}
+                ItemSeparatorComponent={ItemSeparator}
+                renderItem={({ item }) => <RepositoryItem styles={styles} item={item} />}
+            />
+            <Button onPress={() => getCredentials()} title="Press me" />
         </View>
     )
 }

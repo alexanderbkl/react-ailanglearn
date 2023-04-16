@@ -1,14 +1,14 @@
 import { useNavigate } from "react-router-native";
-import { registerUser } from "../requests/client";
-import AuthStorage from "../utils/authStorage";
+import { registerUser } from "../../requests/client";
+import AuthStorage from "../../utils/authStorage";
 import { Formik } from "formik";
 import * as yup from 'yup';
 import SignUpForm from "./SignUpForm";
 import { View } from "react-native";
-import Text from "./Text";
+import Text from "../Composable/Text";
 import { useState } from "react";
-import { Credentials } from "../types";
-import { setProfile } from '../requests/client';
+import { Credentials } from "../../types";
+import { setProfile } from '../../requests/client';
 
 
 const validationSchema = yup.object().shape({
@@ -47,9 +47,9 @@ const validationSchema = yup.object().shape({
 
 
 
-const SignUp = ({ signedObj }: any) => {
+const SignUp = ({ appBarState }: any) => {
 
-    var signedIn = signedObj.signedIn;
+    var signedIn = appBarState.signedIn;
 
     const [errorForm, setErrorForm] = useState('');
 
@@ -83,7 +83,7 @@ const SignUp = ({ signedObj }: any) => {
 
             setProfile()
 
-            signedObj.setSignedIn(true), signedIn = true
+            appBarState.setSignedIn(true), signedIn = true
 
             navigate('/repositories');
 

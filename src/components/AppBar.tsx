@@ -1,8 +1,8 @@
-import { View, StyleSheet, Pressable, ScrollView } from 'react-native';
+import { View, StyleSheet, Pressable, ScrollView, Touchable, TouchableOpacity } from 'react-native';
 import Constants from 'expo-constants';
 import theme from '../theme';
-import Text from './Text';
-import { Link } from 'react-router-native';
+import Text from './Composable/Text';
+import { Link, useNavigate } from 'react-router-native';
 import { CheckAuth, SignOut } from '../utils/authUtils';
 import { useEffect, useState } from 'react';
 import AuthStorage from '../utils/authStorage';
@@ -33,17 +33,24 @@ const styles = StyleSheet.create({
         minWidth: 100,
         textAlign: 'center',
     },
+    tabContainerSelected: {
+        color: 'white',
+        padding: 10,
+        minWidth: 100,
+        backgroundColor: 'gray',
+        textAlign: 'center',
+    },
 })
 
 
-const AppBar = ({ signedObj }: any) => {
+const AppBar = ({ appBarState }: any) => {
 
 
 
 
     //check if user is signed in:
 
-
+    const navigate = useNavigate();
 
 
 
@@ -52,12 +59,21 @@ const AppBar = ({ signedObj }: any) => {
     return (
         <View style={styles.flexContainer}>
             <ScrollView showsHorizontalScrollIndicator={false} horizontal>
-                <Link style={styles.tabContainer} to="/">
-                    <Text color="textWhite" fontWeight="bold" >Repositories</Text>
-                </Link>
-                <SignOut signedObj={signedObj} />
-
+                <TouchableOpacity onPress={() => {
+                    appBarState.setCurrentTabNum(0)
+                    navigate('/repositories')
+                }}>
+                    <Text style={appBarState.currentTabNum === 0 ? styles.tabContainerSelected : styles.tabContainer} color="textWhite" fontWeight="bold" >Repositories</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => {
+                    appBarState.setCurrentTabNum(1)
+                    navigate('/languagechat')
+                }}>
+                    <Text style={appBarState.currentTabNum === 1 ? styles.tabContainerSelected : styles.tabContainer} color="textWhite" fontWeight="bold" >Languageachat</Text>
+                </TouchableOpacity>
             </ScrollView>
+            <SignOut appBarState={appBarState} />
+
         </View>
     )
 }

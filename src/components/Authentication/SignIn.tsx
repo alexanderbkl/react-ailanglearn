@@ -1,10 +1,10 @@
 import { Formik } from 'formik';
 import * as yup from 'yup';
-import { setProfile, signInUser } from '../requests/client';
+import { setProfile, signInUser } from '../../requests/client';
 import React, { useContext } from 'react';
 import SignInForm from './SignInForm';
 import { Button } from 'react-native';
-import AuthStorage from '../utils/authStorage';
+import AuthStorage from '../../utils/authStorage';
 import { useNavigate } from 'react-router-native';
 
 
@@ -24,9 +24,9 @@ const validationSchema = yup.object().shape({
         .required('Password is required'),
 })
 
-const SignIn = ({ signedObj }: any) => {
+const SignIn = ({ appBarState }: any) => {
 
-    var signedIn = signedObj.signedIn;
+    var signedIn = appBarState.signedIn;
 
 
     const navigate = useNavigate();
@@ -48,7 +48,7 @@ const SignIn = ({ signedObj }: any) => {
 
 
             await AuthStorage.setCredentials(signInRequest.data.result);
-            signedObj.setSignedIn(true), signedIn = true
+            appBarState.setSignedIn(true), signedIn = true
 
             setProfile()
 
