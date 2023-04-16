@@ -35,6 +35,10 @@ const SignIn = ({ appBarState }: any) => {
     const onSubmit = async (values: any) => {
 
         console.log('Signing in...')
+        //make small case for username
+        values.username = values.username.toLowerCase();
+        //trim whitespace
+        values.username = values.username.trim();
         var signInRequest: any = await signInUser(values.username, values.password);
 
 
@@ -52,7 +56,7 @@ const SignIn = ({ appBarState }: any) => {
 
             setProfile()
 
-            navigate('/repositories');
+            navigate('/languagechat');
 
         } else {
             console.log(JSON.stringify(signInRequest))

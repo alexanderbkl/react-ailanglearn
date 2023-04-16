@@ -17,7 +17,7 @@ const theme = {
         bold: '700',
     },
     backgroundContainer: {
-        backgroundColor: '#e1e4e8',
+        backgroundColor: '#f4f7fa',
         height: '100%',
     },
     foregroundContainer: {

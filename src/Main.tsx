@@ -8,7 +8,6 @@ import theme from './theme';
 import AppBar from './components/AppBar';
 import SignIn from './components/Authentication/SignIn';
 import { useEffect, useState } from 'react';
-import { CheckAuth } from './utils/authUtils';
 import SignUp from './components/Authentication/SignUp';
 import LanguageChat from './components/Navigation/LanguageChat';
 
@@ -31,7 +30,7 @@ const Main = () => {
                 //transform value into boolean:
                 if (value === 'true') {
                     appBarState.setSignedIn(true);
-                    navigate('/repositories');
+                    navigate('/languagechat');
                 } else {
                     appBarState.setSignedIn(false);
                     navigate('/signin');

@@ -4,7 +4,9 @@ import AuthStorage from './src/utils/authStorage';
 import { useFonts } from 'expo-font';
 
 
+import { Logs } from 'expo'
 
+Logs.enableExpoCliLogging()
 
 export default function App() {
 

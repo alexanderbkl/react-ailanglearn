@@ -85,7 +85,7 @@ const SignUp = ({ appBarState }: any) => {
 
             appBarState.setSignedIn(true), signedIn = true
 
-            navigate('/repositories');
+            navigate('/languagechat');
 
         } else {
             console.log(signUpRequest)

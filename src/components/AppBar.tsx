@@ -3,7 +3,7 @@ import Constants from 'expo-constants';
 import theme from '../theme';
 import Text from './Composable/Text';
 import { Link, useNavigate } from 'react-router-native';
-import { CheckAuth, SignOut } from '../utils/authUtils';
+import { Authentication } from './Navigation/Authentication';
 import { useEffect, useState } from 'react';
 import AuthStorage from '../utils/authStorage';
 
@@ -61,18 +61,18 @@ const AppBar = ({ appBarState }: any) => {
             <ScrollView showsHorizontalScrollIndicator={false} horizontal>
                 <TouchableOpacity onPress={() => {
                     appBarState.setCurrentTabNum(0)
-                    navigate('/repositories')
+                    navigate('/languagechat')
                 }}>
-                    <Text style={appBarState.currentTabNum === 0 ? styles.tabContainerSelected : styles.tabContainer} color="textWhite" fontWeight="bold" >Repositories</Text>
+                    <Text style={appBarState.currentTabNum === 0 ? styles.tabContainerSelected : styles.tabContainer} color="textWhite" fontWeight="bold" >LanguageChat</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => {
                     appBarState.setCurrentTabNum(1)
-                    navigate('/languagechat')
+                    navigate('/repositories')
                 }}>
-                    <Text style={appBarState.currentTabNum === 1 ? styles.tabContainerSelected : styles.tabContainer} color="textWhite" fontWeight="bold" >Languageachat</Text>
+                    <Text style={appBarState.currentTabNum === 1 ? styles.tabContainerSelected : styles.tabContainer} color="textWhite" fontWeight="bold" >Repositories</Text>
                 </TouchableOpacity>
             </ScrollView>
-            <SignOut appBarState={appBarState} />
+            <Authentication appBarState={appBarState} />
 
         </View>
     )

@@ -59,11 +59,12 @@ export const registerUser = async (first_name: string, last_name: string, title:
                 console.log(request);
                 return null
             }
+
         }
 
         return request
     }).catch((error) => {
-        alert('Error: ' + error);
+        alert(error);
     });
 
     if (!response) {
