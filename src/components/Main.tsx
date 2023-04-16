@@ -9,33 +9,57 @@ import AppBar from './AppBar';
 import SignIn from './SignIn';
 import { useEffect, useState } from 'react';
 import { CheckAuth } from '../utils/authUtils';
+import SignUp from './SignUp';
 
 
 
 const Main = () => {
     const navigate = useNavigate();
+    const [signedIn, setSignedIn] = useState(false);
+
+    //envolve it in object to pass as props
+    const signedObj = { signedIn: signedIn, setSignedIn: setSignedIn };
+
 
     useEffect(() => {
-        //check if user is signed in:
-        CheckAuth().then((value) => {
+
+        AuthStorage.getSignedIn().then((value) => {
             if (value !== null) {
-                //navigate to repository list:
-                navigate('/repositories');
+                console.log("vaale" + value)
+                //transform value into boolean:
+                if (value === 'true') {
+                    signedObj.setSignedIn(true);
+                    navigate('/repositories');
+                } else {
+                    signedObj.setSignedIn(false);
+                    navigate('/signin');
+                }
+
+
+
+
             } else {
-                //navigate to sign in
+                signedObj.setSignedIn(false);
                 navigate('/signin');
+
             }
-        })
-    }, [])
+        });
+
+    }, []);
+
+
+
 
     return (
         <View style={theme.backgroundContainer}>
-            <AppBar />
+            <AppBar signedObj={signedObj} />
             <Routes>
                 <Route path="/repositories" element={<RepositoryList />} />
                 <Route path="*" element={<Navigate to="/repositories" replace />} />
-                <Route path="/signin" element={<SignIn />} />
-                
+                <Route path="/signin" element={<SignIn signedObj={signedObj} />} />
+                <Route path="/register" element={<SignUp signedObj={signedObj} />} />
+
+
             </Routes>
         </View>
     );

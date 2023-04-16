@@ -20,51 +20,54 @@ export const CheckAuth = async () => {
 
 }
 
-export const SignOut = () => {
+
+export const SignOut = ({ signedObj }: any) => {
+
     const navigate = useNavigate();
+    var signedIn = signedObj.signedIn;
 
-    var signedIn = false;
 
-    AuthStorage.getSignedIn().then((value) => {
-        if (value !== null) {
-            signedIn = true;
-        } else {
-            signedIn = false;
-        }
-    });
+
+
+    
 
     return (
         signedIn ?
-        <TouchableOpacity>
-            <View
-                style={{
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    borderRadius: 5,
-                }}
-            >
-                <Button onPress={() => {
-                    AuthStorage.removeCredentials()
+            <TouchableOpacity>
+                <View
+                    style={{
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        borderRadius: 5,
+                    }}
+                >
+                    <Button onPress={() => {
+                        AuthStorage.signOut().then(() => {
+                            signedObj.setSignedIn(false), signedIn = false
+                            console.log("signout")
+                            navigate('/signin')
+                        });
                     }
-                    } title="Sign In" />
+                    } title="Sign Out" />
 
-            </View>
-        </TouchableOpacity> :
-        <TouchableOpacity>
-        <View
-            style={{
-                alignItems: 'center',
-                justifyContent: 'center',
-                borderRadius: 5,
-            }}
-        >
-            <Button onPress={() => {
-                navigate('/signin')
-                }
-                } title="Sign out" />
+                </View>
+            </TouchableOpacity> :
+            <TouchableOpacity>
+                <View
+                    style={{
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        borderRadius: 5,
+                    }}
+                >
+                    <Button onPress={() => {
+                        console.log("signout")
+                        navigate('/signin')
+                    }
+                    } title="Sign in" />
 
-        </View>
-    </TouchableOpacity>
+                </View>
+            </TouchableOpacity>
     )
 }
 
@@ -78,7 +81,7 @@ export const SignIn = () => {
                     borderRadius: 5,
                 }}
             >
-                <Button onPress={() => AuthStorage.removeCredentials()} title="Sign out" />
+                <Button onPress={() => AuthStorage.signOut()} title="Sign out" />
 
             </View>
         </TouchableOpacity>

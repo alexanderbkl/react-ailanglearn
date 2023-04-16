@@ -2,9 +2,8 @@ import { useField } from "formik";
 import FormikTextInput from "./FormikTextInput";
 import { Button, Pressable, StyleSheet, TouchableOpacity, View } from 'react-native';
 import theme from "../theme";
-import Text from "./Text";
 import { Navigate, useNavigate } from "react-router-native";
-
+import Text from "./Text";
 const foregroundStyle = theme.foregroundContainer;
 
 const styles = StyleSheet.create({
@@ -22,25 +21,34 @@ const styles = StyleSheet.create({
 })
 
 
-const SignInForm = ({ onSubmit }: any) => {
+const SignUpForm = ({ errorForm, onSubmit }: any) => {
 
 
 
 
-    const [userField, userMeta, userHelpers] = useField('username');
+    const [emailField, emailMeta, emailHelpers] = useField('email');
     const [passwordField, passwordMeta, passwordHelpers] = useField('password');
+    const [passwordConfirmationField, passwordConfirmationMeta, passwordConfirmationHelpers] = useField('passwordConfirmation');
+    const [firstNameField, firstNameMeta, firstNameHelpers] = useField('firstName');
+    const [lastNameField, lastNameMeta, lastNameHelpers] = useField('lastName');
+    const [titleField, titleMeta, titleHelpers] = useField('title');
+
 
     const navigate = useNavigate();
 
 
     return (
         <View style={styles.foregroundContainer}>
-            <Text fontWeight="bold" fontSize="subheading">Sign in</Text>
-            <FormikTextInput name="username" placeholder="Email" />
+            <Text fontWeight="bold" fontSize="subheading">Sign up</Text>
+            <FormikTextInput name="firstName" placeholder="First name" />
+            <FormikTextInput name="lastName" placeholder="Last name" />
+            <FormikTextInput name="title" placeholder="Title" />
+            <FormikTextInput name="email" placeholder="Email" />
+            {errorForm === 'Email exists' &&
+                <Text style={{ color: 'red' }}>{errorForm}</Text>
+            }
             <FormikTextInput name="password" placeholder="Password" secureTextEntry />
-            <Pressable onPress={() => onSubmit()}>
-
-            </Pressable>
+            <FormikTextInput name="passwordConfirmation" placeholder="Password confirmation" secureTextEntry />
 
 
 
@@ -55,7 +63,7 @@ const SignInForm = ({ onSubmit }: any) => {
                             padding: 10,
                         }}
                     >
-                        <Button onPress={() => onSubmit()} title="Sign in" />
+                        <Button onPress={() => onSubmit()} title="Sign up" />
 
                     </View>
                 </TouchableOpacity>
@@ -69,7 +77,7 @@ const SignInForm = ({ onSubmit }: any) => {
                             padding: 10,
                         }}
                     >
-                        <Button color="#bbbbbb" onPress={() => navigate('/register')} title="Register" />
+                        <Button color="#bbbbbb" onPress={() => navigate('/signin')} title="login" />
 
                     </View>
                 </TouchableOpacity>
@@ -78,4 +86,4 @@ const SignInForm = ({ onSubmit }: any) => {
     )
 }
 
-export default SignInForm;
+export default SignUpForm;

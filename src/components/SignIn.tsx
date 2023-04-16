@@ -1,6 +1,6 @@
 import { Formik } from 'formik';
 import * as yup from 'yup';
-import { signInUser } from '../requests/client';
+import { setProfile, signInUser } from '../requests/client';
 import React, { useContext } from 'react';
 import SignInForm from './SignInForm';
 import { Button } from 'react-native';
@@ -24,14 +24,17 @@ const validationSchema = yup.object().shape({
         .required('Password is required'),
 })
 
-const SignIn = () => {
+const SignIn = ({ signedObj }: any) => {
+
+    var signedIn = signedObj.signedIn;
+
 
     const navigate = useNavigate();
 
 
     const onSubmit = async (values: any) => {
 
-
+        console.log('Signing in...')
         var signInRequest: any = await signInUser(values.username, values.password);
 
 
@@ -42,17 +45,17 @@ const SignIn = () => {
 
         if (signInRequest.status === 200) {
             console.log('Sign in successful: ' + signInRequest.message);
-            console.log(JSON.stringify(signInRequest.data.result))
 
 
             await AuthStorage.setCredentials(signInRequest.data.result);
+            signedObj.setSignedIn(true), signedIn = true
+
+            setProfile()
 
             navigate('/repositories');
 
         } else {
-            console.log(signInRequest.message + ': ' + signInRequest.data.result);
             console.log(JSON.stringify(signInRequest))
-            alert(signInRequest.message + ': ' + signInRequest.data.result);
         }
 
     }

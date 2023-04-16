@@ -10,7 +10,7 @@ const theme = {
         subheading: 16,
     },
     fonts: {
-        main: 'System',
+        main: 'Roboto',
     },
     fontWeights: {
         normal: "400",

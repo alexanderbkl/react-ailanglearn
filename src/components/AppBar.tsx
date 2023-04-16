@@ -36,7 +36,8 @@ const styles = StyleSheet.create({
 })
 
 
-const AppBar = () => {
+const AppBar = ({ signedObj }: any) => {
+
 
 
 
@@ -54,7 +55,7 @@ const AppBar = () => {
                 <Link style={styles.tabContainer} to="/">
                     <Text color="textWhite" fontWeight="bold" >Repositories</Text>
                 </Link>
-                <SignOut />
+                <SignOut signedObj={signedObj} />
 
             </ScrollView>
         </View>
