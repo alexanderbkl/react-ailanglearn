@@ -1,5 +1,5 @@
 import Text from '../Composable/Text';
-import { View, Image } from 'react-native';
+import { View, Image, Dimensions } from 'react-native';
 import { StyleSheet } from "react-native";
 
 const teacherImg = require("../../../assets/teacher.png")
@@ -19,30 +19,36 @@ const MessageItem = ({ item }: any) => {
             borderRadius: 10,
             marginLeft: 10,
             marginRight: 10,
-            /*width: 'fit-content',*/
             display: 'flex',
             flexDirection: 'row',
-
+            maxWidth: '80%',
+            height: 'auto',
         },
         flexContainer: {
             display: 'flex',
             flexDirection: 'row',
             alignItems: 'center',
-            justifyContent: 'space-between',
+            flex: 1,
             flexWrap: 'wrap',
+            width: '100%',
+            height: 'auto',
+
         },
         flexContainerColumn: {
             display: 'flex',
             flexDirection: 'column',
-            alignItems: contentAlignment,
-            justifyContent: 'space-between',
-            alignContent: contentAlignment,
-            backgroundColor: 'yellow'
-            
+            flex: 1,
+            flexWrap: 'wrap',
+            width: '100%',
+            height: 'auto',
+
+
         },
         message: {
             color: 'grey',
             fontSize: 16,
+            height: 'auto',
+
         },
 
         image: {
@@ -57,7 +63,7 @@ const MessageItem = ({ item }: any) => {
     });
 
     return (
-        <View style={{ width: '100%', alignItems: contentAlignment }}>
+        <View style={{ width: '100%', height: 'auto', alignItems: contentAlignment }}>
             <View style={styles.container}>
                 <View style={styles.flexContainer}>
 
@@ -74,9 +80,6 @@ const MessageItem = ({ item }: any) => {
                                 <Image style={styles.image} source={teacherImg} />
                             }
                             <Text
-                                adjustsFontSizeToFit={true}
-                                numberOfLines={1}
-
                                 style={styles.message}>{item.message}</Text>
                         </View>
 

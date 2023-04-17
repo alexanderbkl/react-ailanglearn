@@ -117,6 +117,7 @@ const LanguageChat = () => {
             setShowError(true)
         } else {
             setShowError(false)
+            setErrorText('')
         }
     }, [promptValue])
 
@@ -131,7 +132,7 @@ const LanguageChat = () => {
 
 
     return (
-        <View style={{ flexDirection: 'column', width: '100%', height: '100%', marginTop: 'auto', flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <View style={{ flexDirection: 'column', width: '100%', marginTop: 'auto', flex: 1, justifyContent: 'center', alignItems: 'center' }}>
             <View style={{ width: '100%', height: Dimensions.get('window').height * 0.85, marginTop: 10, position: 'relative' }}>
                 <FlatList
                     automaticallyAdjustKeyboardInsets={true}
