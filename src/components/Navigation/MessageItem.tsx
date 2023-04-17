@@ -34,23 +34,22 @@ const MessageItem = ({ item }: any) => {
         flexContainerColumn: {
             display: 'flex',
             flexDirection: 'column',
-            alignItems: 'flex-start',
+            alignItems: contentAlignment,
             justifyContent: 'space-between',
-            flexWrap: 'wrap',
             alignContent: contentAlignment,
+            backgroundColor: 'yellow'
+            
         },
-        description: {
+        message: {
             color: 'grey',
             fontSize: 16,
-
         },
 
         image: {
             width: 25,
             height: 25,
             borderRadius: 5,
-            marginRight: 15,
-            marginLeft: 15,
+            margin: 15,
             alignContent: contentAlignment,
         },
 
@@ -74,7 +73,11 @@ const MessageItem = ({ item }: any) => {
                                 !item.right &&
                                 <Image style={styles.image} source={teacherImg} />
                             }
-                            <Text style={styles.description}>{item.description}</Text>
+                            <Text
+                                adjustsFontSizeToFit={true}
+                                numberOfLines={1}
+
+                                style={styles.message}>{item.message}</Text>
                         </View>
 
                     </View>

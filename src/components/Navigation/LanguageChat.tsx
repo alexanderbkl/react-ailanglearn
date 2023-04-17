@@ -4,6 +4,9 @@ import { useEffect, useRef, useState } from "react"
 import TextInput from "../Composable/TextInput";
 import { StyleSheet } from "react-native";
 import MessageItem from "./MessageItem";
+import { getMessages, postAiMessage } from "../../requests/client";
+import { Message } from "../../types";
+import AuthStorage from "../../utils/authStorage";
 
 
 
@@ -27,91 +30,7 @@ const LanguageChat = () => {
 
 
 
-
-    const repositoriesList = [
-        {
-            id: 'jaredpalmer.formik',
-            description: 'Build forms in React, without the tears',
-            right: true,
-        },
-        {
-            id: 'radils.rails',
-            description: 'Ruby on Rails',
-            right: true,
-        },
-        {
-            id: 'django.djaango',
-            description: 'The Web framework for perfectionists with deadlines.',
-            right: true,
-        },
-        {
-            id: 'reduxdjs.redux',
-            description: 'Predictable state container for JavaScript apps',
-            right: false,
-        },
-        {
-            id: 'jareadpalmer.formik',
-            description: 'Build forms in React, without the tears',
-            right: true,
-        },
-        {
-            id: 'rails.rdaaails',
-            description: 'Ruby on Rails',
-            right: true,
-        },
-        {
-            id: 'djangaaao.django',
-            description: 'The Web framework for perfectionists with deadlines.',
-            right: true,
-        },
-        {
-            id: 'reduaaxdjs.redux',
-            description: 'Predictable state container for JavaScript apps',
-            right: false,
-        },
-        {
-            id: 'jaredpaaaalmer.formik',
-            description: 'Build forms in React, without the tears',
-            right: true,
-        },
-        {
-            id: 'raidls.raaails',
-            description: 'Ruby on Rails',
-            right: true,
-        },
-        {
-            id: 'djangos.aadjango',
-            description: 'The Web framework for perfectionists with deadlines.',
-            right: true,
-        },
-        {
-            id: 'reduxaasjs.redux',
-            description: 'Predictable state container for JavaScript apps',
-            right: false,
-        },
-        {
-            id: 'jaredpaldmer.formik',
-            description: 'Build forms in React, without the tears',
-            right: true,
-        },
-        {
-            id: 'rails.rdails',
-            description: 'Ruby on Rails',
-            right: true,
-        },
-        {
-            id: 'django.djanago',
-            description: 'The Web framework for perfectionists with deadlines.',
-            right: true,
-        },
-        {
-            id: 'reduxjs.redux',
-            description: 'Predictable state container for JavaScript apps',
-            right: false,
-        },
-    ];
-
-    const [repositories, setRepositories] = useState<any>([]);
+    const [messages, setMessages] = useState<Message[]>([]);
 
 
     const ItemSeparator = () => <View style={styles.separator} />;
@@ -123,7 +42,6 @@ const LanguageChat = () => {
 
 
 
-        console.log(values)
 
         if (values.length > 100) {
             setErrorText('Maximum of 100 characters allowed')
@@ -135,10 +53,25 @@ const LanguageChat = () => {
             return
         }
 
-        //add value to respositories array where id is the count of the array, description is the value and right is true
-        const newMessage = { id: Math.random().toString(), description: values, right: true }
+        const response = await postAiMessage(values)
 
-        setRepositories([...repositories, newMessage])
+        let newMessage: Message = response.data.result.message
+        let newResponseMessage: Message = response.data.result.response
+
+        //break line each 60 characters of newMessage and newResponseMessage (check for undefined first)
+        
+        newMessage.right = true
+
+        setMessages([...messages, newMessage, newResponseMessage])
+
+        AuthStorage.setMessages([...messages, newMessage, newResponseMessage])
+
+
+
+        //add value to respositories array where id is the count of the array, message is the value and right is true
+        //const newMessage = { id: Math.random().toString(), message: values, right: true }
+
+        //setRepositories([...repositories, newMessage])
 
         setPromptValue('')
     }
@@ -151,7 +84,31 @@ const LanguageChat = () => {
 
 
     useEffect(() => {
-        setRepositories(repositoriesList);
+        AuthStorage.getMessages().then((res) => {
+            if (res === "undefined" || !res) {
+                getMessages().then((res) => {
+                    //map each value inside res.data.result to a new object with id, message and right
+                    if (res.data.result === "No messages") {
+                        return setMessages([])
+                    }
+                    const newMessages = res.data.result.map((message: any) => {
+                        return {
+                            id: message._id,
+                            message: message.message,
+                            right: message.right,
+                            created_at: message.created_at,
+                            udpated_at: message.updated_at
+                        }
+                    })
+                    AuthStorage.setMessages(newMessages)
+                    setMessages(newMessages)
+                })
+            } else {
+                //transform string to object
+                setMessages(JSON.parse(res))
+            }
+        })
+
     }, []);
 
     useEffect(() => {
@@ -181,7 +138,7 @@ const LanguageChat = () => {
                     showsVerticalScrollIndicator={false}
                     ref={(ref) => { messagesEndRef.current = ref; }}
                     onContentSizeChange={() => scrollToBottom()}
-                    data={repositories}
+                    data={messages}
                     ItemSeparatorComponent={ItemSeparator}
                     renderItem={({ item }) => <MessageItem item={item} />}
                 />
@@ -191,11 +148,11 @@ const LanguageChat = () => {
                     <TextInput
                         onChangeText={(value: string) => setPromptValue(value)}
                         value={promptValue}
+                        showsVerticalScrollIndicator={false}
+                        multiline={true}
                         error={error}
-                        onKeyPress={(e: { key: string; }) => {
-                            e.key === 'Enter' && onSubmit(promptValue)
-                        }}
-                        style={{ backgroundColor: 'white', width: '50%', height: 40, borderRadius: 5, padding: 10, }}
+                        placeholder="Type your message here"
+                        style={{ backgroundColor: 'white', width: '50%', height: 40, borderRadius: 5, padding: 10, overflow: 'hidden' }}
                     />
                     <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
                         <TouchableOpacity
@@ -215,7 +172,7 @@ const LanguageChat = () => {
                     </View>
 
                 </View>
-                {!error && <Text style={styles.errorText}>asdasdasd{errorText}</Text>}
+                {!error && <Text style={styles.errorText}>{errorText}</Text>}
 
             </View>
 

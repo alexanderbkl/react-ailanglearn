@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Credentials, Profile } from '../types';
+import { Credentials, Profile, Message } from '../types';
 
 class AuthStorage {
 
@@ -11,7 +11,6 @@ class AuthStorage {
 
     static async getSignedIn() {
         const signedIn = await AsyncStorage.getItem(`${this.namespace}:signedIn`);
-        console.log("getsignedin: " + signedIn)
         if (!signedIn) {
             return null;
         }
@@ -53,6 +52,7 @@ class AuthStorage {
         AsyncStorage.removeItem(`${this.namespace}:token`);
         AsyncStorage.removeItem(`${this.namespace}:expires_in`);
         AsyncStorage.removeItem(`${this.namespace}:profile`);
+        AsyncStorage.removeItem(`${this.namespace}:messages`);
 
         await AsyncStorage.setItem(`${this.namespace}:signedIn`, "false");
     }
@@ -64,6 +64,13 @@ class AuthStorage {
     static async setProfile(profile: Profile) {
         // Add the access token to the storage
         AsyncStorage.setItem(`${this.namespace}:profile`, JSON.stringify(profile));
+    }
+    static async setMessages(messages: Message[]) {
+        // Add the access token to the storage
+        AsyncStorage.setItem(`${this.namespace}:messages`, JSON.stringify(messages));
+    }
+    static async getMessages() {
+        return await AsyncStorage.getItem(`${this.namespace}:messages`);
     }
 
     

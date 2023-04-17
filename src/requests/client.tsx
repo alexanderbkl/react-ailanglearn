@@ -1,4 +1,4 @@
-import { Credentials, Profile } from "../types";
+import { Credentials, Message, Profile } from "../types";
 import AuthStorage from "../utils/authStorage";
 
 const host = 'http://192.168.1.59:3001';
@@ -118,4 +118,90 @@ export const setProfile = async () => {
     }
     return response;
 
+}
+
+
+export const postAiMessage = async (message: string) => {
+
+    const credentials = await AuthStorage.getCredentials();
+
+    if (!credentials) {
+        return null;
+    }
+
+    if (!await AuthStorage.getCredentials()) {
+        alert('You must be signed in to post a message');
+        return null;
+    }
+
+    const response = await fetch(host + '/message/post', {
+        method: 'POST',
+        headers: {
+            'Authorization': 'Bearer ' + credentials.token,
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ "message": message, "right": true }),
+    }).then(async (response) => {
+        const request = await response.json();
+
+        if (request.status !== 200) {
+            if (request.data.result === 'email already exists') {
+                return 'email exists'
+            } else {
+                console.log(request);
+                alert(request.data.result)
+                return null
+            }
+
+        }
+
+        return request
+    }).catch((error) => {
+        alert(error);
+    });
+
+    if (!response) {
+        return null;
+    }
+    return response;
+
+}
+
+export const getMessages = async () => {
+    const credentials = await AuthStorage.getCredentials();
+
+    if (!credentials) {
+        return null;
+    }
+
+    const response = await fetch(host + '/messages/get', {
+        headers: {
+            'Authorization': 'Bearer ' + credentials.token
+        },
+    }).then(async (response) => {
+        const request = await response.json();
+
+        if (request.status !== 200) {
+            console.log('get messages failed')
+            alert(request.data.result);
+            return null
+        } else {
+            console.log('get messages successful')
+            const messages: Message[] = request.data.result.messages
+
+
+            await AuthStorage.setMessages(messages);
+        }
+
+        return request
+    }).catch((error) => {
+        alert('Error: ' + error);
+    }
+
+    );
+
+    if (!response) {
+        return null;
+    }
+    return response;
 }

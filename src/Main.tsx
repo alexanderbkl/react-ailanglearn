@@ -26,7 +26,6 @@ const Main = () => {
 
         AuthStorage.getSignedIn().then((value) => {
             if (value !== null) {
-                console.log("vaale" + value)
                 //transform value into boolean:
                 if (value === 'true') {
                     appBarState.setSignedIn(true);
